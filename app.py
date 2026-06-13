@@ -172,11 +172,11 @@ if not analyze:
     st.markdown('<div class="section-header">How It Works</div>', unsafe_allow_html=True)
     col1, col2, col3, col4, col5 = st.columns(5)
     steps = [
-        ("🛰️", "Satellite Fetch", "Sentinel-2 optical + Sentinel-1 SAR with speckle filtering"),
-        ("🧠", "AI Classification", "Crop type, stage, VCI/SMI stress indices, phenology"),
-        ("💧", "Water Balance", "ETc = Kc × ET0 (Hargreaves). 8-day deficit vs rainfall"),
-        ("🗺️", "Advisory Map", "Grid-level irrigation map for canal command areas"),
-        ("🤖", "AI Advisory", "LLM-powered stage-aware recommendation with mm targets"),
+        ("", "Satellite Fetch", "Sentinel-2 optical + Sentinel-1 SAR with speckle filtering"),
+        ("", "AI Classification", "Crop type, stage, VCI/SMI stress indices, phenology"),
+        ("", "Water Balance", "ETc = Kc × ET0 (Hargreaves). 8-day deficit vs rainfall"),
+        ("", "Advisory Map", "Grid-level irrigation map for canal command areas"),
+        ("", "AI Advisory", "LLM-powered stage-aware recommendation with mm targets"),
     ]
     for col, (icon, title, desc) in zip([col1, col2, col3, col4, col5], steps):
         with col:
