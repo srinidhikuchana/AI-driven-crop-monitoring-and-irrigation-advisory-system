@@ -12,15 +12,12 @@ from utils.classifier import predict_crop_status
 from utils.sentinel import load_sentinel_scene
 from utils.water_balance import compute_8day_water_deficit, generate_advisory_map
 
-# ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="AgriSat — AI Crop Advisor",
-    page_icon="🛰️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
@@ -88,11 +85,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown("### 🛰️ AgriSat Control Panel")
+    st.markdown("### AgriSat Control Panel")
     st.markdown("---")
-    st.markdown("**📍 Field Location**")
+    st.markdown("**Field Location**")
 
     region = st.selectbox("Quick Select Region", [
         "Custom",
@@ -117,17 +113,17 @@ with st.sidebar:
         lat = st.number_input("Latitude",  value=18.0, format="%.4f")
         lon = st.number_input("Longitude", value=79.58, format="%.4f")
 
-    st.markdown("**🌾 Crop Settings**")
+    st.markdown("**Crop Settings**")
     crop_override = st.selectbox("Override Crop Type (optional)",
                                   ["Auto-detect", "Rice", "Wheat", "Cotton", "Maize", "Soybean"])
     scene_date = st.selectbox("Sentinel Scene",
                                ["Latest Available", "June 2025", "March 2025", "December 2024"])
 
     st.markdown("---")
-    analyze = st.button("🔍 Analyze Field")
+    analyze = st.button("Analyze Field")
 
     st.markdown("---")
-    st.markdown("**🔑 API Status**")
+    st.markdown("**API Status**")
     owm_key  = st.secrets.get("OPENWEATHER_KEY", "")
     or_key   = st.secrets.get("OPENROUTER_KEY", "")
     cdse_id  = st.secrets.get("CDSE_CLIENT_ID", "")
@@ -140,10 +136,9 @@ with st.sidebar:
         st.caption("🟡 = using synthetic/fallback data. Add keys in secrets.toml for live data.")
 
 
-# ── Hero ──────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero-banner">
-  <p class="hero-title">🛰️ AgriSat — AI Crop Monitoring & Irrigation Advisory</p>
+  <p class="hero-title">AgriSat — AI Crop Monitoring & Irrigation Advisory</p>
   <p class="hero-sub">
     Sentinel-2 Optical + Sentinel-1 SAR fusion &nbsp;·&nbsp;
     ETc Water-Balance Modelling &nbsp;·&nbsp;
@@ -155,7 +150,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── Landing state ─────────────────────────────────────────────────────────────
 if not analyze:
     c1, c2, c3, c4 = st.columns(4)
     cards = [
@@ -174,7 +168,7 @@ if not analyze:
             </div>""", unsafe_allow_html=True)
 
     st.markdown("---")
-    st.info("👈 Select a region from the sidebar and click **Analyze Field** to begin.")
+    st.info("Select a region from the sidebar and click **Analyze Field** to begin.")
 
     st.markdown('<div class="section-header">How It Works</div>', unsafe_allow_html=True)
     col1, col2, col3, col4, col5 = st.columns(5)
@@ -195,17 +189,16 @@ if not analyze:
             </div>""", unsafe_allow_html=True)
 
 else:
-    # ── Run analysis ──────────────────────────────────────────────────────────
-    with st.spinner("🛰️ Loading Sentinel scene and running AI analysis..."):
+    with st.spinner("Loading Sentinel scene and running AI analysis..."):
         scene      = load_sentinel_scene(lat, lon)
         crop_input = None if crop_override == "Auto-detect" else crop_override
         result     = predict_crop_status(scene, crop_input)
 
-    with st.spinner("🌦️ Fetching weather forecast and soil data..."):
+    with st.spinner("Fetching weather forecast and soil data..."):
         weather = get_weather_forecast(lat, lon)
         soil    = get_soil_type(lat, lon)
 
-    with st.spinner("💧 Computing ETc water balance and deficit map..."):
+    with st.spinner("Computing ETc water balance and deficit map..."):
         water_balance = compute_8day_water_deficit(
             crop=result["crop"],
             stage=result["stage"],
@@ -222,7 +215,7 @@ else:
             soil_water_retention=soil.get("water_retention", "Moderate"),
         )
 
-    with st.spinner("🤖 Generating AI irrigation advisory..."):
+    with st.spinner("Generating AI irrigation advisory..."):
         advisory_text = generate_advisory(
             crop=result["crop"],
             stage=result["stage"],
@@ -236,8 +229,8 @@ else:
             smi=result.get("smi"),
         )
 
-    # ── KPI row ───────────────────────────────────────────────────────────────
-    st.markdown('<div class="section-header">📊 Field Status Overview</div>', unsafe_allow_html=True)
+
+    st.markdown('<div class="section-header">Field Status Overview</div>', unsafe_allow_html=True)
     st.caption(f"📡 Data source: {scene.get('source', 'Unknown')}")
 
     k1, k2, k3, k4, k5, k6, k7, k8 = st.columns(8)
@@ -267,12 +260,12 @@ else:
 
     st.markdown("---")
 
-    # ── Main layout: left maps, right advisory ────────────────────────────────
+
     left, right = st.columns([1.3, 1])
 
     with left:
-        # Growth stage bar
-        st.markdown('<div class="section-header">🌱 Phenology — Crop Growth Stage</div>', unsafe_allow_html=True)
+
+        st.markdown('<div class="section-header">Phenology — Crop Growth Stage</div>', unsafe_allow_html=True)
         stages    = ["Germination", "Vegetative", "Flowering", "Harvest-Ready"]
         stage_num = result["stage_num"]
         ph        = result.get("phenology", {})
@@ -291,7 +284,7 @@ else:
         st.pyplot(fig, use_container_width=True)
         plt.close()
 
-        # Phenology metrics row
+
         sos  = ph.get("sos_week", "N/A")
         peak = ph.get("peak_week", "N/A")
         lgp  = ph.get("lgp_weeks", "N/A")
@@ -306,8 +299,8 @@ else:
                     <div style="color:#e6edf3;font-size:1.1rem;font-weight:700;">{val}</div>
                 </div>""", unsafe_allow_html=True)
 
-        # NDVI map
-        st.markdown('<div class="section-header">🗺️ NDVI Field Map</div>', unsafe_allow_html=True)
+
+        st.markdown('<div class="section-header">NDVI Field Map</div>', unsafe_allow_html=True)
         ndvi_map = scene["ndvi_map"]
         fig2, ax2 = plt.subplots(figsize=(7, 4))
         fig2.patch.set_facecolor("#161b22")
@@ -327,7 +320,6 @@ else:
         st.pyplot(fig2, use_container_width=True)
         plt.close()
 
-        # SAR map
         st.markdown('<div class="section-header">📡 SAR Backscatter Map (Sentinel-1 VV)</div>',
                     unsafe_allow_html=True)
         sar_map = scene["sar_map"]
@@ -355,8 +347,7 @@ else:
         st.pyplot(fig3, use_container_width=True)
         plt.close()
 
-        # ── IRRIGATION ADVISORY MAP (new) ─────────────────────────────────────
-        st.markdown('<div class="section-header">🗺️ Irrigation Advisory Map — Command Area</div>',
+        st.markdown('<div class="section-header">Irrigation Advisory Map — Command Area</div>',
                     unsafe_allow_html=True)
         adv_colors = ["#1a3a1a", "#9e6a03", "#c74a00", "#8b0000"]
         adv_labels = ["No irrigation", "Light (≤20 mm)", "Moderate (20–40 mm)", "Urgent (>40 mm)"]
@@ -383,16 +374,15 @@ else:
 
     with right:
         # Advisory box
-        st.markdown('<div class="section-header">💧 AI Irrigation Advisory</div>',
+        st.markdown('<div class="section-header">AI Irrigation Advisory</div>',
                     unsafe_allow_html=True)
         st.markdown(f"""
         <div class="advisory-box">
-            <strong style="color:#7dce82;">🤖 Stage-Aware Advisory — {result['stage']} Phase</strong><br><br>
+            <strong style="color:#7dce82;">Stage-Aware Advisory — {result['stage']} Phase</strong><br><br>
             {advisory_text}
         </div>""", unsafe_allow_html=True)
 
-        # ── Water Balance Panel (new) ─────────────────────────────────────────
-        st.markdown('<div class="section-header">💧 8-Day Water Balance (ETc Model)</div>',
+        st.markdown('<div class="section-header">8-Day Water Balance (ETc Model)</div>',
                     unsafe_allow_html=True)
         wb_status_icon = {"Sufficient": "🟢", "Mild Deficit": "🟡",
                           "Moderate Deficit": "🟠", "Severe Deficit": "🔴"}.get(
@@ -413,14 +403,12 @@ else:
             </table>
         </div>""", unsafe_allow_html=True)
 
-        # 8-day daily breakdown
-        with st.expander("📅 Daily ETc Breakdown (8-day)", expanded=False):
+        with st.expander("Daily ETc Breakdown (8-day)", expanded=False):
             wb_df = pd.DataFrame(water_balance["daily_breakdown"])
             wb_df.columns = ["Date", "ET₀ (mm)", "ETc (mm)", "Rain (mm)", "Deficit (mm)"]
             st.dataframe(wb_df, use_container_width=True, hide_index=True)
 
-        # VCI/SMI gauges
-        st.markdown('<div class="section-header">📊 Stress Indices</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Stress Indices</div>', unsafe_allow_html=True)
         vci_val = result.get("vci", 50)
         smi_val = result.get("smi", 50)
 
@@ -444,8 +432,7 @@ else:
         st.pyplot(fig_idx, use_container_width=True)
         plt.close()
 
-        # Soil profile
-        st.markdown('<div class="section-header">🌍 Soil Profile</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Soil Profile</div>', unsafe_allow_html=True)
         st.markdown(f"""
         <div class="metric-card" style="text-align:left;">
             <div style="color:#8b949e; font-size:0.8rem; margin-bottom:4px;">WRB Classification</div>
@@ -456,8 +443,8 @@ else:
             <div style="color:#58a6ff; font-weight:600;">{soil.get('drainage','Moderate')}</div>
         </div>""", unsafe_allow_html=True)
 
-        # 7-day weather
-        st.markdown('<div class="section-header">🌦️ 7-Day Weather Forecast</div>',
+
+        st.markdown('<div class="section-header">7-Day Weather Forecast</div>',
                     unsafe_allow_html=True)
         if weather.get("daily"):
             cols = st.columns(min(7, len(weather["daily"])))
@@ -471,26 +458,26 @@ else:
                         <div style="color:#58a6ff;">{day['rain']}mm</div>
                     </div>""", unsafe_allow_html=True)
 
-        # Alerts
-        st.markdown('<div class="section-header">⚠️ Active Alerts</div>', unsafe_allow_html=True)
+
+        st.markdown('<div class="section-header">Active Alerts</div>', unsafe_allow_html=True)
         alerts = []
         if result["stress_level"] == "High":
-            alerts.append(("🔴 Critical Moisture Stress",
+            alerts.append(("Critical Moisture Stress",
                             f"VCI={vci_val:.0f}/100 with high SAR stress — immediate irrigation required."))
         if vci_val < 35:
-            alerts.append(("🟠 VCI Below Drought Threshold",
+            alerts.append(("VCI Below Drought Threshold",
                             f"VCI={vci_val:.0f} < 35 indicates vegetation drought stress (Kogan method)."))
         if result["stage"] == "Flowering":
-            alerts.append(("🟡 Critical Growth Phase",
+            alerts.append(("Critical Growth Phase",
                             "Flowering stage: water deficit now causes permanent yield loss."))
         if water_balance["deficit_mm"] > 30:
-            alerts.append(("🔴 Severe Water Deficit",
+            alerts.append(("Severe Water Deficit",
                             f"{water_balance['deficit_mm']:.0f} mm deficit over 8 days — apply {water_balance['irr_required_mm']:.0f} mm urgently."))
         if weather.get("rain_next_48h", 0) < 5:
-            alerts.append(("🟡 Dry Spell Ahead",
+            alerts.append(("Dry Spell Ahead",
                             "Less than 5mm rain expected in 48h. Plan irrigation accordingly."))
         if not alerts:
-            alerts.append(("🟢 No Critical Alerts", "Field conditions are within normal range."))
+            alerts.append(("No Critical Alerts", "Field conditions are within normal range."))
         for title_a, body_a in alerts:
             st.markdown(f"""
             <div class="alert-box">
@@ -498,9 +485,8 @@ else:
                 <span style="font-size:0.85rem;">{body_a}</span>
             </div>""", unsafe_allow_html=True)
 
-    # ── NDVI trend with SOS/peak markers ─────────────────────────────────────
     st.markdown("---")
-    st.markdown('<div class="section-header">📈 NDVI Trend — SOS / Peak / LGP Detection</div>',
+    st.markdown('<div class="section-header">NDVI Trend — SOS / Peak / LGP Detection</div>',
                 unsafe_allow_html=True)
     dates      = pd.date_range(end=datetime.now(), periods=12, freq="2W")
     ndvi_trend = scene.get("ndvi_trend", np.random.uniform(0.2, 0.75, 12))
@@ -541,8 +527,7 @@ else:
     st.pyplot(fig4, use_container_width=True)
     plt.close()
 
-    # ── Irrigation calendar ───────────────────────────────────────────────────
-    st.markdown('<div class="section-header">📅 8-Day Irrigation Calendar</div>',
+    st.markdown('<div class="section-header">8-Day Irrigation Calendar</div>',
                 unsafe_allow_html=True)
     today    = datetime.now()
     cal_data = []
@@ -557,15 +542,14 @@ else:
             "ETc (mm)":    wb_day["etc"],
             "Rainfall (mm)": rain,
             "Daily Deficit": f"{def_d:.1f} mm",
-            "Irrigate":      "✅ Yes" if irrigate else "⏭️ Skip",
+            "Irrigate":      "Yes" if irrigate else "Skip",
             "Apply (mm)":    f"{amount:.0f}" if irrigate else "—",
         })
     df = pd.DataFrame(cal_data)
     st.dataframe(df, use_container_width=True, hide_index=True)
 
-    # ── Validation / Model info ───────────────────────────────────────────────
     st.markdown("---")
-    st.markdown('<div class="section-header">🎯 Model Accuracy & Validation Framework</div>',
+    st.markdown('<div class="section-header">Model Accuracy & Validation Framework</div>',
                 unsafe_allow_html=True)
     acc = result.get("accuracy", {})
     col_v1, col_v2 = st.columns(2)
@@ -595,7 +579,6 @@ else:
             </div>
         </div>""", unsafe_allow_html=True)
 
-    # Footer
     st.markdown("---")
     st.markdown("""
     <div style="text-align:center; color:#484f58; font-size:0.8rem; padding:10px 0;">
