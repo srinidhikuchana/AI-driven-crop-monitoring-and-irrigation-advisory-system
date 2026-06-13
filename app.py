@@ -144,7 +144,6 @@ st.markdown("""
     ETc Water-Balance Modelling &nbsp;·&nbsp;
     VCI / SMI Stress Indices &nbsp;·&nbsp;
     Phenology-Aware Advisory &nbsp;·&nbsp;
-    Bharatiya Antariksh Hackathon 2026
   </p>
 </div>
 """, unsafe_allow_html=True)
