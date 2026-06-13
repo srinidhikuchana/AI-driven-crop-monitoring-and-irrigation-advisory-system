@@ -17,8 +17,6 @@ Architecture (production):
 
 from __future__ import annotations
 import numpy as np
-from scipy.signal import find_peaks
-
 # ── Crop profiles ─────────────────────────────────────────────────────────────
 CROP_PROFILES = {
     "Rice":    {"ndvi_range": (0.35, 0.80), "vv_range": (-18, -8),  "ndwi_min":  0.05, "weight": 1.2},
