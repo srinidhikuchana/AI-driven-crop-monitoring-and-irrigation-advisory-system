@@ -1,11 +1,11 @@
-# 🛰️ AgriSat — AI Crop Monitoring & Irrigation Advisory
+# AgriSat — AI Crop Monitoring & Irrigation Advisory
 ### Bharatiya Antariksh Hackathon 2026 | Challenge 6
 
 > **Sentinel-2 Optical + Sentinel-1 SAR fusion for all-weather, stage-aware crop monitoring and irrigation advisory.**
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 agrisat/
@@ -27,7 +27,7 @@ agrisat/
 
 ---
 
-## ⚙️ Local Setup
+## Local Setup
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/agrisat-bah2026.git
@@ -46,7 +46,7 @@ streamlit run app.py
 
 ---
 
-## 🔑 API Keys
+## API Keys
 
 All keys are optional — the app falls back to deterministic synthetic /
 regional-default data if a key is missing, so it always runs end-to-end.
@@ -69,7 +69,7 @@ OPENROUTER_KEY     = "sk-or-your_key_here"
 
 ---
 
-## ☁️ Deploy to Streamlit Community Cloud
+## Deploy to Streamlit Community Cloud
 
 1. Push this repo to GitHub (`.streamlit/secrets.toml` is gitignored — never commit it)
 2. Go to [share.streamlit.io](https://share.streamlit.io) → **New app**
@@ -83,11 +83,11 @@ OPENWEATHER_KEY    = "your_key_here"
 OPENROUTER_KEY     = "sk-or-your_key_here"
 ```
 
-5. Click **Deploy** ✅
+5. Click **Deploy** 
 
 ---
 
-## 🧠 Technical Architecture
+## Technical Architecture
 
 ```
 Field Coordinates (lat, lon)
@@ -144,7 +144,7 @@ OpenWeatherMap    SoilGrids ISRIC
 
 ---
 
-## 📊 Supported Crops & Regions
+## Supported Crops & Regions
 
 | Crop | Region | Growth Stages |
 |---|---|---|
@@ -156,7 +156,7 @@ OpenWeatherMap    SoilGrids ISRIC
 
 ---
 
-## 🏆 Hackathon Notes
+## Hackathon Notes
 
 - **Challenge 6:** AI-Driven Automated Crop Type, Moisture Stress Detection
   and Irrigation Advisory Across Growth Stages Using Moderate Resolution
@@ -171,7 +171,7 @@ OpenWeatherMap    SoilGrids ISRIC
 
 ---
 
-## 📄 License
+## License
 
 MIT License — open for academic and non-commercial use.
 
