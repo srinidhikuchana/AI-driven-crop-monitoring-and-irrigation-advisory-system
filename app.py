@@ -14,7 +14,6 @@ from utils.sentinel import load_sentinel_scene
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="AgriSat — AI Crop Advisor",
-    page_icon="🛰️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
