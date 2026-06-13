@@ -206,7 +206,6 @@ st.markdown("""
     Sentinel-2 Optical + Sentinel-1 SAR fusion &nbsp;·&nbsp; 
     All-weather monitoring &nbsp;·&nbsp; 
     Stage-aware irrigation advisory &nbsp;·&nbsp;
-    Bharatiya Antariksh Hackathon 2026
   </p>
 </div>
 """, unsafe_allow_html=True)
@@ -499,7 +498,7 @@ else:
     st.markdown("---")
     st.markdown("""
     <div style="text-align:center; color:#484f58; font-size:0.8rem; padding:10px 0;">
-        AgriSat &nbsp;·&nbsp; Bharatiya Antariksh Hackathon 2026 &nbsp;·&nbsp;
+        AgriSat &nbsp;·&nbsp;
         Sentinel-1 SAR + Sentinel-2 Optical Fusion &nbsp;·&nbsp;
         Data: ESA Copernicus | SoilGrids ISRIC | OpenWeatherMap
     </div>""", unsafe_allow_html=True)
